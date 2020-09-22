@@ -1,0 +1,65 @@
+version: 2.1
+
+## ALIASES
+aliases:
+    - &dir ~/repo
+    - &cache_key dependency-cache-{{ checksum "package.json" }}
+    - &attach_workspace
+      attach_workspace:
+          at: *dir
+
+## EXECUTORS
+executors:
+    default:
+        working_directory: *dir
+        docker:
+            - image: circleci/node:lts
+
+## JOBS
+jobs:
+    checkout_code:
+        executor: default
+        steps:
+            - checkout
+            - restore_cache:
+                  key: *cache_key
+            - run: npm install
+            - save_cache:
+                  key: *cache_key
+                  paths:
+                      - ./node_modules
+            - persist_to_workspace:
+                  root: *dir
+                  paths:
+                      - .
+
+    test:
+        executor: default
+        steps:
+            - *attach_workspace
+            - run: npm run lint
+            - run: npm test
+
+    release:
+        executor: default
+        steps:
+            - *attach_workspace
+            # - checkout # Commenting this line out as I don't think it is needed, please uncomment if the release fails
+            - run: npm run semantic-release
+
+## WORKFLOWS
+workflows:
+    build:
+        jobs:
+            - checkout_code
+            - test:
+                  requires:
+                      - checkout_code
+            - release:
+                  context: org-global
+                  requires:
+                      - test
+                  filters:
+                      branches:
+                          only:
+                              - master
