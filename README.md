@@ -1,24 +1,47 @@
-# Package Template
+# region sync
 
 [![Known Vulnerabilities](https://snyk.io/test/github/5app/region-sync/badge.svg)](https://snyk.io/test/github/5app/region-sync)
-[![CircleCI](https://circleci.com/gh/5app/package-template.svg?style=shield)](https://circleci.com/gh/5app/package-template)
+[![CircleCI](https://circleci.com/gh/5app/region-sync.svg?style=shield)](https://circleci.com/gh/5app/region-sync)
 
-This is a template for starting new JS projects at 5app.
+Wraps SNS/SQS with some boilerplate logic we use for syncing data between regions:
 
-## What now
+SNS+SQS:
 
-1. Run `npm init` to configure [./package.json](./package.json]).
-1. You also need to manually update [./package.json](./package.json]) for `name`, `version` and `description` and all repository links.
-1. Implement tests (or `npm test` will fail).
-1. Replace this file with real information about your package.
-1. Write your code and commit/push.
-1. Configure in [Circle CI](https://app.circleci.com/projects/project-dashboard/github/5app/).
+1. structure all messages with `date`, `fromRegion` and JSON encoded `payload`.
 
-### For packages to be posted to NPM
+SQS:
 
-1. Remove the setting `private: true` from [./package.json](./package.json]).
-   This protects accidentally publishing to _npm_. If you want to publish to npm then this will prevent it until removed.
+1. prevents handlers being called if source + dest regions are the same
+1. deletes messages after handler has handled (if successful)
+1. sets up the continuous long poll
 
-### Notes
+## SQS usage:
 
-1. Changelog will be automatically populated during CI process.
+```javascript
+const queueUrl = 'http://localhost:4576/000000000000/fooq';
+const handler = createHandler({
+	backoffSeconds: 4,
+	longPollSeconds: 1,
+	currentRegion: 'us-east-1',
+});
+
+handler.addQueueHandler(queueUrl, async function (msg) {
+	// handle it, but if promise rejects, the message wont be removed.
+});
+```
+
+## SNS usage:
+
+```javascript
+const publisher = createPublisher({
+	currentRegion: 'us-east-1',
+	snsRegion: 'us-east-1',
+});
+await publisher.publish(topicArn, payload);
+```
+
+## testing
+
+```
+LOGS_LEVEL=info npm test
+```
