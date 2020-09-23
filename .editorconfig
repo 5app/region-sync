@@ -12,6 +12,3 @@ trim_trailing_whitespace = false
 
 [*.svg]
 insert_final_newline = false
-
-[{package.json,*.yml}]
-indent_style = tab

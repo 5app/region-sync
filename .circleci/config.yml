@@ -1,6 +1,5 @@
 version: 2.1
 
-## ALIASES
 aliases:
     - &dir ~/repo
     - &cache_key dependency-cache-{{ checksum "package.json" }}
@@ -8,14 +7,12 @@ aliases:
       attach_workspace:
           at: *dir
 
-## EXECUTORS
 executors:
     default:
         working_directory: *dir
         docker:
-            - image: circleci/node:lts
+            - image: circleci/node:12
 
-## JOBS
 jobs:
     checkout_code:
         executor: default
@@ -44,10 +41,8 @@ jobs:
         executor: default
         steps:
             - *attach_workspace
-            # - checkout # Commenting this line out as I don't think it is needed, please uncomment if the release fails
             - run: npm run semantic-release
 
-## WORKFLOWS
 workflows:
     build:
         jobs:
