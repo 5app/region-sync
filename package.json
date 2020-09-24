@@ -11,6 +11,10 @@
 		"semantic-release": "semantic-release",
 		"test": "tap --lines=100 --branches=84 --functions=100"
 	},
+	"files": [
+		"src/",
+		"index.js"
+	],
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/5app/region-sync.git"
@@ -22,6 +26,9 @@
 	"homepage": "https://github.com/5app/region-sync#readme",
 	"publishConfig": {
 		"access": "public"
+	},
+	"engines": {
+		"node": ">=10.0.0"
 	},
 	"commitlint": {
 		"extends": [
@@ -45,6 +52,10 @@
 		}
 	},
 	"dependencies": {
+		"@5app/logger": "^2.0.2",
+		"aws-sdk": "^2.756.0"
+	},
+	"devDependencies": {
 		"@commitlint/cli": "^11.0.0",
 		"@commitlint/config-conventional": "^11.0.0",
 		"@semantic-release/changelog": "^5.0.1",
@@ -52,15 +63,12 @@
 		"eslint": "^7.9.0",
 		"eslint-config-5app": "^0.12.3",
 		"eslint-config-prettier": "^6.11.0",
+		"eslint-plugin-node": "^11.1.0",
 		"eslint-plugin-prettier": "^3.1.4",
 		"husky": "^4.3.0",
 		"prettier": "^2.1.2",
 		"pretty-quick": "^3.0.2",
 		"semantic-release": "^17.1.2",
-		"@5app/logger": "^2.0.2",
-		"aws-sdk": "^2.756.0"
-	},
-	"devDependencies": {
 		"nock": "^13.0.4",
 		"tap": "^14.10.8"
 	},
@@ -76,5 +84,5 @@
 		"queues",
 		"topics"
 	],
-	"author": "Sam Adams <adams.sam@gmail.com>"
+	"author": "Sam Adams"
 }
