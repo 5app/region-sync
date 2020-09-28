@@ -1,3 +1,4 @@
-/**
- * Entry point to initiate the project
- */
+const {createHandler} = require('./src/createHandler');
+const {createPublisher} = require('./src/createPublisher');
+
+module.exports = {createHandler, createPublisher};

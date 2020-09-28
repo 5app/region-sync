@@ -1,15 +1,47 @@
-# Package Template
+# region sync
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/5app/package-template.svg)](https://greenkeeper.io/)
-[![CircleCI](https://circleci.com/gh/5app/package-template.svg?style=shield)](https://circleci.com/gh/5app/package-template)
+[![Known Vulnerabilities](https://snyk.io/test/github/5app/region-sync/badge.svg)](https://snyk.io/test/github/5app/region-sync)
+[![CircleCI](https://circleci.com/gh/5app/region-sync.svg?style=shield)](https://circleci.com/gh/5app/region-sync)
 
-This is a template for starting new JS projects at 5app.
+Wraps SNS/SQS with some boilerplate logic we use for syncing data between regions:
 
-## Getting started
+SNS+SQS:
 
-Run `npm init` to configure package.json
+1. structure all messages with `date`, `fromRegion` and JSON encoded `payload`.
 
-### For packages to be posted to NPM
+SQS:
 
-1. Remove the setting `private: true` from [./package.json](./package.json]).
-   This protects accidentally publishing to *npm*. If you want to publish to npm then this will prevent it until removed.
+1. prevents handlers being called if source + dest regions are the same
+1. deletes messages after handler has handled (if successful)
+1. sets up the continuous long poll
+
+## SQS usage:
+
+```javascript
+const queueUrl = 'http://localhost:4576/000000000000/fooq';
+const handler = createHandler({
+	backoffSeconds: 4,
+	longPollSeconds: 1,
+	currentRegion: 'us-east-1',
+});
+
+handler.addQueueHandler(queueUrl, async function (msg) {
+	// handle it, but if promise rejects, the message wont be removed.
+});
+```
+
+## SNS usage:
+
+```javascript
+const publisher = createPublisher({
+	currentRegion: 'us-east-1',
+	snsRegion: 'us-east-1',
+});
+await publisher.publish(topicArn, payload);
+```
+
+## testing
+
+```
+LOGS_LEVEL=info npm test
+```
