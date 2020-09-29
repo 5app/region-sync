@@ -18,6 +18,7 @@ SQS:
 ## SQS usage:
 
 ```javascript
+const {createHandler} = require('@5app/region-sync');
 const queueUrl = 'http://localhost:4576/000000000000/fooq';
 const handler = createHandler({
 	backoffSeconds: 4,
@@ -33,6 +34,8 @@ handler.addQueueHandler(queueUrl, async function (msg) {
 ## SNS usage:
 
 ```javascript
+const {createPublisher} = require('@5app/region-sync');
+const payload = {foo: 'bar'};
 const publisher = createPublisher({
 	currentRegion: 'us-east-1',
 	snsRegion: 'us-east-1',
