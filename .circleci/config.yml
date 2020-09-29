@@ -41,7 +41,6 @@ jobs:
         executor: default
         steps:
             - *attach_workspace
-            - checkout # needed to set auth to allow pushing tag to git repo
             - run: npm run semantic-release
 
 workflows:

@@ -66,7 +66,7 @@ function nockReceiveError(queueUrl, times = 1) {
 			)}&Version=2012-11-05&VisibilityTimeout=30&WaitTimeSeconds=1`
 		)
 		.times(times)
-		.replyWithError('something awful happened');
+		.reply(400, 'eg bad queue url');
 	return {
 		scope,
 	};
@@ -262,8 +262,6 @@ tap.test('should backoff and resume for errors', (t) => {
 		backoffSeconds: 1,
 		longPollSeconds: 1,
 		currentRegion: 'us-east-1',
-		// otherwise we have to nock enough errors to get past the aws sdk's automatic retrying.
-		awsClientMaxRetries: 0,
 	});
 	let handlerCalls = 0;
 	handler.addQueueHandler(queueUrl, (msg) => {

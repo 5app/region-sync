@@ -7,7 +7,6 @@ function createHandler(config) {
 		currentRegion,
 		awsEndpoint,
 		backoffSeconds = 30,
-		awsClientMaxRetries,
 		enabled = true,
 		// we split currentRegion from sqsRegion to solve https://github.com/localstack/localstack/issues/2982
 		sqsRegion = currentRegion,
@@ -19,7 +18,6 @@ function createHandler(config) {
 	const sqsClient = new SQS({
 		region: sqsRegion,
 		endpoint: awsEndpoint,
-		maxRetries: awsClientMaxRetries,
 	});
 
 	async function invokeHandler(handler, message, messageMetadata) {
