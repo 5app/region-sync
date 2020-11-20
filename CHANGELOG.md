@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/5app/region-sync/compare/v1.0.1...v1.0.2) (2020-11-20)
+
+
+### Bug Fixes
+
+* better logging context for errors ([b61912f](https://github.com/5app/region-sync/commit/b61912fc7b7a0a3f8ba4b0db1fddfc953930b8e4))
+
 ## [1.0.1](https://github.com/5app/region-sync/compare/v1.0.0...v1.0.1) (2020-09-29)
 
 
