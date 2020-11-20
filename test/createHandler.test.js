@@ -20,9 +20,7 @@ function nockReceiveMessage(queueUrl, messageObj, times = 1) {
 	let messageXml = '';
 	if (messageObj !== null) {
 		const message =
-			typeof messageObj === 'string'
-				? messageObj
-				: JSON.stringify(messageObj);
+			typeof messageObj === 'string' ? messageObj : JSON.stringify(messageObj);
 		const body = JSON.stringify({
 			Type: 'Notification',
 			MessageId: '56f45548-d39f-4d04-ab11-5edb91e02c92',

@@ -54,10 +54,11 @@ function createHandler(config) {
 		if (closed) {
 			return;
 		}
-		logger.debug(
-			`Waiting for messages ${queueUrl} to handler via longpoll`,
-			{longPollSeconds, currentRegion, sqsRegion}
-		);
+		logger.debug(`Waiting for messages ${queueUrl} to handler via longpoll`, {
+			longPollSeconds,
+			currentRegion,
+			sqsRegion,
+		});
 		const params = {
 			QueueUrl: queueUrl,
 			MaxNumberOfMessages: 1,
@@ -97,7 +98,11 @@ function createHandler(config) {
 				await invokeHandler(handler, message, messageMetadata);
 			} catch (e) {
 				success = false;
-				logger.error('Failure handling message', e);
+				logger.error(
+					'Failure handling message',
+					{messageMetadata, queueUrl},
+					e
+				);
 			}
 
 			if (success) {
@@ -130,9 +135,7 @@ function createHandler(config) {
 		deregister,
 		addQueueHandler(queueUrl, handler) {
 			if (!enabled) {
-				logger.warn(
-					`Attempting to add handler for ${queueUrl} when disabled.`
-				);
+				logger.warn(`Attempting to add handler for ${queueUrl} when disabled.`);
 			} else {
 				pollMessages(queueUrl, handler);
 			}

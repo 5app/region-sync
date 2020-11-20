@@ -1,60 +1,60 @@
 version: 2.1
 
 aliases:
-    - &dir ~/repo
-    - &cache_key dependency-cache-{{ checksum "package.json" }}
-    - &attach_workspace
-      attach_workspace:
-          at: *dir
+  - &dir ~/repo
+  - &cache_key dependency-cache-{{ checksum "package.json" }}
+  - &attach_workspace
+    attach_workspace:
+      at: *dir
 
 executors:
-    default:
-        working_directory: *dir
-        docker:
-            - image: circleci/node:14
+  default:
+    working_directory: *dir
+    docker:
+      - image: circleci/node:14
 
 jobs:
-    checkout_code:
-        executor: default
-        steps:
-            - checkout
-            - restore_cache:
-                  key: *cache_key
-            - run: npm install
-            - save_cache:
-                  key: *cache_key
-                  paths:
-                      - ./node_modules
-            - persist_to_workspace:
-                  root: *dir
-                  paths:
-                      - .
+  checkout_code:
+    executor: default
+    steps:
+      - checkout
+      - restore_cache:
+          key: *cache_key
+      - run: npm install
+      - save_cache:
+          key: *cache_key
+          paths:
+            - ./node_modules
+      - persist_to_workspace:
+          root: *dir
+          paths:
+            - .
 
-    test:
-        executor: default
-        steps:
-            - *attach_workspace
-            - run: npm run lint
-            - run: npm test
+  test:
+    executor: default
+    steps:
+      - *attach_workspace
+      - run: npm run lint
+      - run: npm test
 
-    release:
-        executor: default
-        steps:
-            - *attach_workspace
-            - run: npm run semantic-release
+  release:
+    executor: default
+    steps:
+      - *attach_workspace
+      - run: npm run semantic-release
 
 workflows:
-    build:
-        jobs:
+  build:
+    jobs:
+      - checkout_code
+      - test:
+          requires:
             - checkout_code
-            - test:
-                  requires:
-                      - checkout_code
-            - release:
-                  context: org-global
-                  requires:
-                      - test
-                  filters:
-                      branches:
-                          only:
-                              - master
+      - release:
+          context: org-global
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
