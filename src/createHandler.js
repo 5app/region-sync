@@ -89,16 +89,15 @@ function createHandler(config) {
 			} = sqsMessage;
 			const {Message: message} = JSON.parse(body);
 			let success = true;
-			logger.debug(
-				`Invoking handler for message from queue: "${queueUrl}", Metadata: ${JSON.stringify(
-					messageMetadata
-				)}`
-			);
+			logger.info('Invoking handler for message from queue', {
+				messageMetadata,
+				queueUrl,
+			});
 			try {
 				await invokeHandler(handler, message, messageMetadata);
 			} catch (e) {
 				success = false;
-				logger.error(`Failure handling message: ${e}`);
+				logger.error('Failure handling message', e);
 			}
 
 			if (success) {

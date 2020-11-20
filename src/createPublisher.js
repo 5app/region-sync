@@ -13,15 +13,16 @@ function createPublisher(config) {
 	const snsClient = new SNS({region: snsRegion, endpoint: awsEndpoint});
 
 	async function sendSNSMessage(topicArn, payload = null) {
+		const message = {
+			payload,
+			fromRegion: currentRegion,
+			date: new Date().toISOString(),
+		};
 		const params = {
-			Message: JSON.stringify({
-				payload,
-				fromRegion: currentRegion,
-				date: new Date().toISOString(),
-			}),
+			Message: JSON.stringify(message),
 			TopicArn: topicArn,
 		};
-		logger.debug(`Publishing to ${topicArn}`, params);
+		logger.info(`Publishing message`, {message, topicArn});
 		return snsClient.publish(params).promise();
 	}
 
