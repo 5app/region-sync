@@ -54,7 +54,8 @@
 	},
 	"dependencies": {
 		"@5app/logger": "^2.1.0",
-		"aws-sdk": "^2.796.0"
+		"aws-sdk": "^2.796.0",
+		"sns-sqs-big-payload": "0.0.11"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^11.0.0",

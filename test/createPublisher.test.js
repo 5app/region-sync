@@ -41,7 +41,8 @@ tap.test('should publish message', async (t) => {
 		snsRegion: 'us-east-1',
 	});
 	const res = await publisher.publish(topicArn, payload);
-	t.same(Object.keys(res), ['ResponseMetadata', 'MessageId']);
+	t.same(Object.keys(res), ['snsResponse']);
+	t.same(Object.keys(res.snsResponse), ['ResponseMetadata', 'MessageId']);
 	scope.done();
 });
 
@@ -53,7 +54,8 @@ tap.test('should publish default null payload', async (t) => {
 		snsRegion: 'us-east-1',
 	});
 	const res = await publisher.publish(topicArn);
-	t.same(Object.keys(res), ['ResponseMetadata', 'MessageId']);
+	t.same(Object.keys(res), ['snsResponse']);
+	t.same(Object.keys(res.snsResponse), ['ResponseMetadata', 'MessageId']);
 	scope.done();
 });
 
