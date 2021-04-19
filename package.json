@@ -70,7 +70,7 @@
 		"nock": "^13.0.5",
 		"prettier": "^2.2.0",
 		"pretty-quick": "^3.1.0",
-		"semantic-release": "^17.2.4",
+		"semantic-release": "^17.4.2",
 		"tap": "^14.11.0"
 	},
 	"keywords": [
