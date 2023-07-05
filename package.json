@@ -68,7 +68,7 @@
 		"eslint-plugin-prettier": "^3.1.4",
 		"husky": "^5.0.0",
 		"nock": "^13.0.5",
-		"prettier": "^2.2.0",
+		"prettier": "^3.0.0",
 		"pretty-quick": "^3.1.0",
 		"semantic-release": "^17.2.4",
 		"tap": "^14.11.0"
